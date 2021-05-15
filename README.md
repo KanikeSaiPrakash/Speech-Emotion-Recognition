@@ -1,5 +1,5 @@
-# Speech-Emotion-Recognition-
-Deep Learning
+# Speech-Emotion-Recognition
+## Deep Learning
 
 Follow this README text file to get the clear idea about the repository.
 
@@ -10,7 +10,7 @@ Follow this README text file to get the clear idea about the repository.
 * [SAVEE](https://www.kaggle.com/ejlok1/surrey-audiovisual-expressed-emotion-savee) - _Surrey Audio-Visual Expressed Emotion_
 * [CREMA-D](https://www.kaggle.com/ejlok1/cremad) - _Crowd Sourced Emotional Multimodal Actors Dataset (CREMA-D)_
 * [IEMOCAP](https://www.kaggle.com/jamaliasultanajisha/iemocap-full) - _Interactive Emotional Dyadic Motion Capture_
-*
+
 ## **TESTING DATASETS:**
 #### _German_
 * [EMO-DB](https://www.kaggle.com/piyushagni5/berlin-database-of-emotional-speech-emodb) - _Emo-DB Database_
