@@ -82,16 +82,29 @@ The Simulated and Induced data-set is used in the above approaches rather than t
 - There are several traditional statistical algorithms for speech emotion recognition which are limited to an assumption of using the training and testing data from the same database (Cross-corpus problem). Also for feature selection  process CNN makes all low to high-level feature extractions simpler and more efficient but can't deal well in numerous emotional classes and require a lot of data collection to train a model.
 
 ## MFCC: 
-- They are derived from a type of cepstral representation of the audio clip (a nonlinear "spectrum-of-a-spectrum"). The difference between the cepstrum and the mel-frequency cepstrum, the frequency bands are equally spaced on the mel scale, which approximates the human auditory system's response more closely than the linearly-spaced frequency bands used in the normal cepstrum. The steps to calculate the MFCC are as follows :
-Take the Fourier transform of (a windowed) a signal. Map the powers of the spectrum obtained above onto the mel scale, using triangular overlapping windows. Take the logs of the powers at each of the mel frequencies. Take the discrete cosine transform of the list of mel log powers. The MFCCs are the amplitudes of the resulting spectrum.
+- They are derived from a type of cepstral representation of the audio clip (a nonlinear "spectrum-of-a-spectrum"). The difference between the cepstrum and the mel-frequency cepstrum, the frequency bands are equally spaced on the mel scale, which approximates the human auditory system's response more closely than the linearly-spaced frequency bands used in the normal cepstrum.
+-  The steps to calculate the MFCC are as follows :
+   - Take the Fourier transform of (a windowed) a signal. 
+   - Map the powers of the spectrum obtained above onto the mel scale, using triangular overlapping windows. 
+   - Take the logs of the powers at each of the mel frequencies. 
+   - Take the discrete cosine transform of the list of mel log powers. 
+   - The MFCCs are the amplitudes of the resulting spectrum.
 
-$$ Mel(f) = 2595 log(1+f/700) $$
+Mel(f) = 2595 log(1+f/700) 
 
 ## Mel-spectrogram:
 - Extracting the Mel-spectrogram features of an audio samples.
    - By mapping the audio signal from time domain to the frequency domain by using fast fourier transform. These operations done frame wise (window filters) by overlapping a portion of adjacent frames.
    -  By converting the y-axis (frequency) to a log scale and the color dimension (amplitude) to decibels to form the spectrogram.
    - Map the y-axis (frequency) onto the mel scale to form the Mel-spectrogram.
+
+[](./pictures/image.png)
+
+## Modified GD gram:
+- Frame wise group delay after mapping the audio signal to the frequency domain using FFT by overlapping windows and saved in the form of image as shown in figure below.
+
+
+ 
 ## Model 1:
 - A CNN Model 1 is built as shown in figure named Model-1, the convolutional layers are 1-Dimensinal as input data shape is aligned 40 features in 1-Dimension and 'ReLu' activation function is used because ReLu function shows the better performance. Dropout of 10 percent is used to get rid of overfitting problem. After that maxpooling layer is used to extract the features that are dominant after the convolutional layers. Finally, flatten the features and feed forward to the dense layer with 'Softmax' activation function to classify.
 
@@ -115,16 +128,15 @@ $$ Mel(f) = 2595 log(1+f/700) $$
 - The size of Mel-spectrogram feature is 224 x 224 x 3 image, which is used to train the few standard pretrained models such as Resnet-50, Resnet-34 and Resnet-18. These models are intially loaded with  weights set to the Imagenet standard called Transfer Learning, by removing the top layer i.e, softmax activation layer where standard models are used for 1000 classes and we are adjusting it to our convenience by removing the top layer and adding a trainable dense(softmax activation) layers to classify less number of classes. In this project  Resnet-50 is trained on Mel-spectrogram features for 4(neutral, happy, sad, anger), 5(neutral, happy, sad, anger,fear), 6(neutral, happy, sad, anger,fear,Disgust) emotional classes. It is observed that as the number of classes increases the performace of the model decrases w.r.to validation accuracy as well as the testing accuracy on testing with Emo-db dataset. In the same way the Resnet-34 and Resnet-18 are trained with mel-spectrogram features for 6 classes and it is observed that the Resnet-34 is performing better than Resnet-18 w.r.to validation accuracy. And testing of Emo-db dataset has been done with only Resnet-34 as it is performing better and rest of the works done only Resnet50.
 
 
+- Further work involves the combination of the two features so that it can add more weight to the features. Another feature is Modified Gd-gram as shown in figure below  and it is extracted for all the audio samples and trained the Resnet-50 for 6 classes by combining both features framewise and resize it to size of 224 x 224x 3(Standard Imagenet input size). The performance of this model is less than model trained with Mel-spectrograms alone. 
 
-- Further work involves the combination of the two features so that it can add more weight to the features. Another feature is Modified Gd-gram (fig-3) and it is extracted for all the audio samples and trained the Resnet-50 for 6 classes by combining both features framewise and resize it to size of 224 x 224x 3(Standard Imagenet input size). The performance of this model is less than model trained with Mel-spectrograms alone. 
+- This is observed that the performance reduced due to the image concatenated with other image and resize factor to make it standard size. To get rid of this effect, using a seperate model to each type of feature image i.e Mel-spectrogram features to Resnet-50 pretrained model and Modified-Gd-gram to VGG-16 pretraied model and both models are concatenated as shown in figure below at the last layers called Multi-input method. The inputs to the Multi-input model can be of any type (e.g: image, categorical, numerical vector) etc. 
 
-- This is observed that the performance reduced due to the image concatenated with other image and resize factor to make it standard size. To get rid of this effect, using a seperate model to each type of feature image i.e Mel-spectrogram features to Resnet-50 pretrained model and Modified-Gd-gram to VGG-16 pretraied model and both models are concatenated (fig-4) at the last layers called Multi-input method. The inputs to the Multi-input model can be of any type (e.g: image, categorical, numerical vector) etc. 
-
-- In similar way the multi-input model can be applicable to any type of input data, so this model will make use of Mel-spectrogram to Resnet-50 and MFCC's to the CNN model and both concatenated (Fig-5) at the last layer is performing better than the mutli-input model of mel-spectrogram and Modified-Gd-gram, where as it's performance is not upto the mark of the model with Mel-spectrograms alone.
+- In similar way the multi-input model can be applicable to any type of input data, so this model will make use of Mel-spectrogram to Resnet-50 and MFCC's to the CNN model and both concatenated as shown in figure below at the last layer is performing better than the mutli-input model of mel-spectrogram and Modified-Gd-gram, where as it's performance is not upto the mark of the model with Mel-spectrograms alone.
 
 ## Results:
 
-- Combined Ravdess and Tess datasets. Models are trained with 80 percent data and tested with remaining. The CNN Model 1 trained with Batch size of 16 and 200 Epochs, result in accuracy on an average of '85.82 percent' as shown in figure 3(model accuracy). The CNN Model II trained with the same Batch size and Epochs Epochs, result in accuracy on an average of '82.05 percent' as shown in figures in results section (model accuracy).
+- Combined Ravdess and Tess datasets. Models are trained with 80 percent data and tested with remaining. The CNN Model 1 trained with Batch size of 16 and 200 Epochs, result in accuracy on an average of '85.82 percent' as shown in figure 3(model accuracy). The CNN Model 2 trained with the same Batch size and Epochs Epochs, result in accuracy on an average of '82.05 percent' as shown in figures in results section (model accuracy).
 - 
 - Results have been obtained for emodb test dataset for different models as summarised in Table 1. Details of the features and number of classes are also given in the Table.
 
