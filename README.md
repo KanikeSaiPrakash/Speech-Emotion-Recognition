@@ -90,7 +90,7 @@ The Simulated and Induced data-set is used in the above approaches rather than t
    - Take the discrete cosine transform of the list of mel log powers. 
    - The MFCCs are the amplitudes of the resulting spectrum.
 
-Mel(f) = 2595 log(1+f/700) 
+$Mel(f) = 2595 log(1+f/700)$
 
 ## Mel-spectrogram:
 - Extracting the Mel-spectrogram features of an audio samples.
@@ -98,7 +98,7 @@ Mel(f) = 2595 log(1+f/700)
    -  By converting the y-axis (frequency) to a log scale and the color dimension (amplitude) to decibels to form the spectrogram.
    - Map the y-axis (frequency) onto the mel scale to form the Mel-spectrogram.
 
-[](./pictures/image.png)
+[Mel-spectrogram](./images/mel.png)
 
 ## Modified GD gram:
 - Frame wise group delay after mapping the audio signal to the frequency domain using FFT by overlapping windows and saved in the form of image as shown in figure below.
@@ -116,7 +116,7 @@ Mel(f) = 2595 log(1+f/700)
 ## Resnet:
 
 - ResNet is a short name for a residual network. Deep convolutional neural networks have achieved the human level image classification result. Deep networks extract low, middle and high-level features and classifiers in an end-to-end multi-layer fashion, and the number of stacked layers can enrich the “levels” of features. When the deeper network starts to converge, a degradation problem has been exposed. With the network depth increasing, accuracy gets saturated and then degrades rapidly. Such degradation is not caused by overfitting or by adding more layers to a deep network leads to higher training error.
-- The deterioration of training accuracy shows that not all systems are easy to optimize.To overcome this problem, Microsoft introduced a deep residual learning framework. Instead of hoping every few stacked layers directly fit a desired underlying mapping, they explicitly let these layers fit a residual mapping. The formulation of $F(x)+x$ can be realized by feedforward neural networks with shortcut connections. Shortcut connections are those skipping one or more layers shown in figure.
+- The deterioration of training accuracy shows that not all systems are easy to optimize.To overcome this problem, Microsoft introduced a deep residual learning framework. Instead of hoping every few stacked layers directly fit a desired underlying mapping, they explicitly let these layers fit a residual mapping. The formulation of F(x)+x can be realized by feedforward neural networks with shortcut connections. Shortcut connections are those skipping one or more layers shown in figure.
 
 - By using the residual network, there are many problems which can be solved such as:
     - ResNets are easy to optimize.
