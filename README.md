@@ -155,8 +155,8 @@ The Simulated and Induced data-set is used in the above approaches rather than t
 
 ## TABLE:
 
-| **Models**|**Classes**|**Features**|**Datasets(English)**|**Validation Accuracy**|**Testing Accuracy on Emodb German dataset**|
-|   |    |   |    |    |    |
+| **Models**     |**Classes**        |**Features**       |**Datasets(English)**       |**Validation Accuracy**           |**Testing Accuracy on Emodb German dataset**|
+| ---------      |   -------         | -------   ----    |  ------------------------  | ----------------------------     |  ----------------------                    |
 |   CNN Model 1      |    8    |     MFCC    |       Ravdess, Tess       |    85.82        %  |         % |
 |   |    |   |    |    |    |
 |   CNN Model 1      |    8    |    MFCC     |        Ravdess, Tess        |     82.05        %  |           % |
