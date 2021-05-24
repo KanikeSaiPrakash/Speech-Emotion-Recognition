@@ -72,3 +72,69 @@ Information about the speakers
 - 14 - female, 35 years
 - 15 - male, 25 years
 - 16 - female, 31 years
+
+## Feature Selection:
+- Feature selection aims to obtain a subset of a relevant features that are selected from the feature space and to facilitate subsequent analysis . The traditional feature selection methods are involved extracting features in time or frequency domain. E.g, Pitch, Energy, Power, Amplitude, FFT, Mel-Scale measurements like Mel-spectrum, Mel-frequency Cepstral Coefficients (MFCC), Spectogram, Linear prediction coefficients (LPC), n-gram, Constant Q Cepstral Coefficients (CQCC), etc.
+- The most used features of speech involve both time and frequency combined. These features will help in keeping track of both time and frequency variations rather than a limitation to only one domain.
+The Simulated and Induced data-set is used in the above approaches rather than the Natural data-set. Natural data involve several pre-processing steps like data cleaning(Noise reduction, sampling issue).etc.  
+
+## PROBLEM DEFINITION:
+- There are several traditional statistical algorithms for speech emotion recognition which are limited to an assumption of using the training and testing data from the same database (Cross-corpus problem). Also for feature selection  process CNN makes all low to high-level feature extractions simpler and more efficient but can't deal well in numerous emotional classes and require a lot of data collection to train a model.
+
+## MFCC: 
+- They are derived from a type of cepstral representation of the audio clip (a nonlinear "spectrum-of-a-spectrum"). The difference between the cepstrum and the mel-frequency cepstrum, the frequency bands are equally spaced on the mel scale, which approximates the human auditory system's response more closely than the linearly-spaced frequency bands used in the normal cepstrum. The steps to calculate the MFCC are as follows :
+Take the Fourier transform of (a windowed) a signal. Map the powers of the spectrum obtained above onto the mel scale, using triangular overlapping windows. Take the logs of the powers at each of the mel frequencies. Take the discrete cosine transform of the list of mel log powers. The MFCCs are the amplitudes of the resulting spectrum.
+
+$$ Mel(f) = 2595 log(1+f/700) $$
+
+## Mel-spectrogram:
+- Extracting the Mel-spectrogram features of an audio samples.
+   - By mapping the audio signal from time domain to the frequency domain by using fast fourier transform. These operations done frame wise (window filters) by overlapping a portion of adjacent frames.
+   -  By converting the y-axis (frequency) to a log scale and the color dimension (amplitude) to decibels to form the spectrogram.
+   - Map the y-axis (frequency) onto the mel scale to form the Mel-spectrogram.
+## Model 1:
+- A CNN Model 1 is built as shown in figure named Model-1, the convolutional layers are 1-Dimensinal as input data shape is aligned 40 features in 1-Dimension and 'ReLu' activation function is used because ReLu function shows the better performance. Dropout of 10 percent is used to get rid of overfitting problem. After that maxpooling layer is used to extract the features that are dominant after the convolutional layers. Finally, flatten the features and feed forward to the dense layer with 'Softmax' activation function to classify.
+
+## Model 2:
+- A CNN Model 2 is built as shown in figure named model-2, the convolutional layers are 1-Dimensional and 'ReLu' activation is used. Batch Normalization is used to standardizes the inputs to a layer for each mini-batch. This has the effect of stabilizing the learning process and dramatically reducing the number of training epochs required to train deep networks. Dropout of 10 percent is used to overcome the overfitting problem. Then a maxpooling layer is used to extract the dominant features. Finally flatten the features and feed forward to dense layer with 'Softmax 'activation layer to classify.
+
+> Model 2 has more hidden units than Model 1, leads to get low training error but still have high generalization error due to 'overfitting' and 'high variance' result in accuracy reduction.
+ 
+## Resnet:
+
+- ResNet is a short name for a residual network. Deep convolutional neural networks have achieved the human level image classification result. Deep networks extract low, middle and high-level features and classifiers in an end-to-end multi-layer fashion, and the number of stacked layers can enrich the “levels” of features. When the deeper network starts to converge, a degradation problem has been exposed. With the network depth increasing, accuracy gets saturated and then degrades rapidly. Such degradation is not caused by overfitting or by adding more layers to a deep network leads to higher training error.
+- The deterioration of training accuracy shows that not all systems are easy to optimize.To overcome this problem, Microsoft introduced a deep residual learning framework. Instead of hoping every few stacked layers directly fit a desired underlying mapping, they explicitly let these layers fit a residual mapping. The formulation of $F(x)+x$ can be realized by feedforward neural networks with shortcut connections. Shortcut connections are those skipping one or more layers shown in figure.
+
+- By using the residual network, there are many problems which can be solved such as:
+    - ResNets are easy to optimize.
+    - ResNets can easily gain accuracy from greatly increased depth.
+
+
+## Work Done:
+
+- The size of Mel-spectrogram feature is 224 x 224 x 3 image, which is used to train the few standard pretrained models such as Resnet-50, Resnet-34 and Resnet-18. These models are intially loaded with  weights set to the Imagenet standard called Transfer Learning, by removing the top layer i.e, softmax activation layer where standard models are used for 1000 classes and we are adjusting it to our convenience by removing the top layer and adding a trainable dense(softmax activation) layers to classify less number of classes. In this project  Resnet-50 is trained on Mel-spectrogram features for 4(neutral, happy, sad, anger), 5(neutral, happy, sad, anger,fear), 6(neutral, happy, sad, anger,fear,Disgust) emotional classes. It is observed that as the number of classes increases the performace of the model decrases w.r.to validation accuracy as well as the testing accuracy on testing with Emo-db dataset. In the same way the Resnet-34 and Resnet-18 are trained with mel-spectrogram features for 6 classes and it is observed that the Resnet-34 is performing better than Resnet-18 w.r.to validation accuracy. And testing of Emo-db dataset has been done with only Resnet-34 as it is performing better and rest of the works done only Resnet50.
+
+
+
+- Further work involves the combination of the two features so that it can add more weight to the features. Another feature is Modified Gd-gram (fig-3) and it is extracted for all the audio samples and trained the Resnet-50 for 6 classes by combining both features framewise and resize it to size of 224 x 224x 3(Standard Imagenet input size). The performance of this model is less than model trained with Mel-spectrograms alone. 
+
+- This is observed that the performance reduced due to the image concatenated with other image and resize factor to make it standard size. To get rid of this effect, using a seperate model to each type of feature image i.e Mel-spectrogram features to Resnet-50 pretrained model and Modified-Gd-gram to VGG-16 pretraied model and both models are concatenated (fig-4) at the last layers called Multi-input method. The inputs to the Multi-input model can be of any type (e.g: image, categorical, numerical vector) etc. 
+
+- In similar way the multi-input model can be applicable to any type of input data, so this model will make use of Mel-spectrogram to Resnet-50 and MFCC's to the CNN model and both concatenated (Fig-5) at the last layer is performing better than the mutli-input model of mel-spectrogram and Modified-Gd-gram, where as it's performance is not upto the mark of the model with Mel-spectrograms alone.
+
+## Results:
+
+- Combined Ravdess and Tess datasets. Models are trained with 80 percent data and tested with remaining. The CNN Model 1 trained with Batch size of 16 and 200 Epochs, result in accuracy on an average of '85.82 percent' as shown in figure 3(model accuracy). The CNN Model II trained with the same Batch size and Epochs Epochs, result in accuracy on an average of '82.05 percent' as shown in figures in results section (model accuracy).
+- 
+- Results have been obtained for emodb test dataset for different models as summarised in Table 1. Details of the features and number of classes are also given in the Table.
+
+
+## Conclusion :
+- We explored three features such as Mel-spectrogram, Modified-Gd gram, MFCC's. In which Mel-spectrogram and MFCC's are considered as the primary features to train the model. With the results obtained Resnet-50 performs better for classes where there is no confusion e,g: For 4(neutral, happy, sad, anger) it performs well as all emotions differ in the feature image pattern where as by involving fear and disgust emotions the model is getting confuse sue to similarities in pattern of anger, fear, disgust.
+
+- Mel-spectrogram gives the better result on features category and Resnet-50 and Resnet-34 gives the better results in 4 and 6 classes respectively. 
+
+- In overall Resnet-34 (34-layers) performs well compared to Resnet-50 (50-layers) for high number of classes. As the number of cnn layers increases the high level features(large area of image) are considered as the network goes deeper, this results in confusion due to the similarities in patterns of feature images of certain classes e.g: 1) Anger, Fear, Disgust. 2) Neutral, Sad.
+
+
+- The performance of Multi-input model considering MFCC's and Mel-spectrogram is better than the model with Mel-spectrogram alone and multi-input model with Modified-Gd gram and Mel-spectrogram as Mfcc's are features that are coefficients of nearest or respective windowed mel-scale coefficient. So MFCC's and Mel-spectrogram are the best features to evaluate emotions in speech.
