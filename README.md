@@ -158,23 +158,14 @@ The Simulated and Induced data-set is used in the above approaches rather than t
 | **Models**     |**Classes**        |**Features**       |**Datasets(English)**       |**Validation Accuracy**           |**Testing Accuracy on Emodb German dataset**|
 |-|-|-|-|-|-|
 |   CNN Model 1      |    8    |     MFCC    |       Ravdess, Tess       |    85.82        %  |         % |
-
 |   CNN Model 1      |    8    |    MFCC     |        Ravdess, Tess        |     82.05        %  |           % |
-
 |   Resnet 50      |   4     |    Mel-spectrogram     |      Ravdess, Tess, Crema, Iemocap, Savee        |    75.76        %  |      64.60     % |
-
 |    Resnet 50       |    5    |     Mel-spectrogram    |      Ravdess, Tess, Crema, Iemocap, Savee         |    66.86        %  |      46.57     % |
-
 |    Resnet 50       |    6    |    Mel-spectrogram     |Ravdess, Tess, Crema, Iemocap, Savee |     62.18       %  |     35.46      % |
-
 |   Resnet 34        |    6    |    Mel-spectrogram     |         Ravdess, Tess, Crema, Iemocap, Savee      |    68.15        %  |    48.33  % |
-
 |   Resnet 18       |     6   |     Mel-spectrogram   |       Ravdess, Tess, Crema, Iemocap, Savee        |     67.62       %  |           % |
-
-|    Resnet 50       |    6    |    Mel-spectrogram & Modified Gd gram framewise concatention |      Ravdess, Tess, Crema, Iemocap, Savee         |    65.67   %  |   32.82        % |
-
+|    Resnet 50       |    6    |    Mel-spectrogram & Modified Gd gram framewise concatention |      Ravdess, Tess, Crema, Iemocap, Savee         |    65.67   %  |   32.82 % |
 |   Resnet 50 and VGG 16       |     6   |   Mel-spectrogram & Modified GD gram     |        Ravdess, Tess, Crema, Iemocap, Savee       |   65.01         %  |  31.72         % |
-
 |    Resnet 50 and CNN Model 1      |    6    |    Mel-spectrogram &MFCC    |       Ravdess, Tess, Crema, Iemocap, Savee        |    73.14        %  |    39.65       % |
 
 
