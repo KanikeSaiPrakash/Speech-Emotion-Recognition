@@ -90,7 +90,9 @@ The Simulated and Induced data-set is used in the above approaches rather than t
    - Take the discrete cosine transform of the list of mel log powers. 
    - The MFCCs are the amplitudes of the resulting spectrum.
 
-$Mel(f) = 2595 log(1+f/700)$
+#### ** _Mel(f) = 2595 log(1+f/700)_ ** 
+
+[Figure MFCC Block diagram](./images/mfcc.png)
 
 ## Mel-spectrogram:
 - Extracting the Mel-spectrogram features of an audio samples.
@@ -98,20 +100,14 @@ $Mel(f) = 2595 log(1+f/700)$
    -  By converting the y-axis (frequency) to a log scale and the color dimension (amplitude) to decibels to form the spectrogram.
    - Map the y-axis (frequency) onto the mel scale to form the Mel-spectrogram.
 
-(./images/mel.png)
+[Figure Mel-spectrogram](./images/mel.png)
 
 ## Modified GD gram:
 - Frame wise group delay after mapping the audio signal to the frequency domain using FFT by overlapping windows and saved in the form of image as shown in figure below.
 
-
+[Figure Modified GD gram](./images/gd.png)
  
-## Model 1:
-- A CNN Model 1 is built as shown in figure named Model-1, the convolutional layers are 1-Dimensinal as input data shape is aligned 40 features in 1-Dimension and 'ReLu' activation function is used because ReLu function shows the better performance. Dropout of 10 percent is used to get rid of overfitting problem. After that maxpooling layer is used to extract the features that are dominant after the convolutional layers. Finally, flatten the features and feed forward to the dense layer with 'Softmax' activation function to classify.
 
-## Model 2:
-- A CNN Model 2 is built as shown in figure named model-2, the convolutional layers are 1-Dimensional and 'ReLu' activation is used. Batch Normalization is used to standardizes the inputs to a layer for each mini-batch. This has the effect of stabilizing the learning process and dramatically reducing the number of training epochs required to train deep networks. Dropout of 10 percent is used to overcome the overfitting problem. Then a maxpooling layer is used to extract the dominant features. Finally flatten the features and feed forward to dense layer with 'Softmax 'activation layer to classify.
-
-> Model 2 has more hidden units than Model 1, leads to get low training error but still have high generalization error due to 'overfitting' and 'high variance' result in accuracy reduction.
  
 ## Resnet:
 
@@ -121,9 +117,20 @@ $Mel(f) = 2595 log(1+f/700)$
 - By using the residual network, there are many problems which can be solved such as:
     - ResNets are easy to optimize.
     - ResNets can easily gain accuracy from greatly increased depth.
-
+[Figure Resnet Shortcut connection](./images/resnet.png)
 
 ## Work Done:
+#### Model 1: 
+
+8 Classes (neutral, calm, happy, sad, anger,fear,Disgust, surprise)
+
+- A CNN Model 1 is built as shown in figure named Model-1, the convolutional layers are 1-Dimensinal as input data shape is aligned 40 features in 1-Dimension and 'ReLu' activation function is used because ReLu function shows the better performance. Dropout of 10 percent is used to get rid of overfitting problem. After that maxpooling layer is used to extract the features that are dominant after the convolutional layers. Finally, flatten the features and feed forward to the dense layer with 'Softmax' activation function to classify.
+- 
+[Figure CNN Model 1](./images/model1.PNG)
+#### Model 2:
+- A CNN Model 2 is built as shown in figure named model-2, the convolutional layers are 1-Dimensional and 'ReLu' activation is used. Batch Normalization is used to standardizes the inputs to a layer for each mini-batch. This has the effect of stabilizing the learning process and dramatically reducing the number of training epochs required to train deep networks. Dropout of 10 percent is used to overcome the overfitting problem. Then a maxpooling layer is used to extract the dominant features. Finally flatten the features and feed forward to dense layer with 'Softmax 'activation layer to classify.
+[Figure CNN Model 2](./images/model3.PNG)
+> Model 2 has more hidden units than Model 1, leads to get low training error but still have high generalization error due to 'overfitting' and 'high variance' result in accuracy reduction.
 
 - The size of Mel-spectrogram feature is 224 x 224 x 3 image, which is used to train the few standard pretrained models such as Resnet-50, Resnet-34 and Resnet-18. These models are intially loaded with  weights set to the Imagenet standard called Transfer Learning, by removing the top layer i.e, softmax activation layer where standard models are used for 1000 classes and we are adjusting it to our convenience by removing the top layer and adding a trainable dense(softmax activation) layers to classify less number of classes. In this project  Resnet-50 is trained on Mel-spectrogram features for 4(neutral, happy, sad, anger), 5(neutral, happy, sad, anger,fear), 6(neutral, happy, sad, anger,fear,Disgust) emotional classes. It is observed that as the number of classes increases the performace of the model decrases w.r.to validation accuracy as well as the testing accuracy on testing with Emo-db dataset. In the same way the Resnet-34 and Resnet-18 are trained with mel-spectrogram features for 6 classes and it is observed that the Resnet-34 is performing better than Resnet-18 w.r.to validation accuracy. And testing of Emo-db dataset has been done with only Resnet-34 as it is performing better and rest of the works done only Resnet50.
 
@@ -131,14 +138,45 @@ $Mel(f) = 2595 log(1+f/700)$
 - Further work involves the combination of the two features so that it can add more weight to the features. Another feature is Modified Gd-gram as shown in figure below  and it is extracted for all the audio samples and trained the Resnet-50 for 6 classes by combining both features framewise and resize it to size of 224 x 224x 3(Standard Imagenet input size). The performance of this model is less than model trained with Mel-spectrograms alone. 
 
 - This is observed that the performance reduced due to the image concatenated with other image and resize factor to make it standard size. To get rid of this effect, using a seperate model to each type of feature image i.e Mel-spectrogram features to Resnet-50 pretrained model and Modified-Gd-gram to VGG-16 pretraied model and both models are concatenated as shown in figure below at the last layers called Multi-input method. The inputs to the Multi-input model can be of any type (e.g: image, categorical, numerical vector) etc. 
+[Figure Mel_and Modified Gd Gram Multi input model](./images/melGD-multi.PNG)
 
 - In similar way the multi-input model can be applicable to any type of input data, so this model will make use of Mel-spectrogram to Resnet-50 and MFCC's to the CNN model and both concatenated as shown in figure below at the last layer is performing better than the mutli-input model of mel-spectrogram and Modified-Gd-gram, where as it's performance is not upto the mark of the model with Mel-spectrograms alone.
-
+[Figure Mel_and MFCC Multi input model](./images/melmfcc.PNG)
 ## Results:
 
-- Combined Ravdess and Tess datasets. Models are trained with 80 percent data and tested with remaining. The CNN Model 1 trained with Batch size of 16 and 200 Epochs, result in accuracy on an average of '85.82 percent' as shown in figure 3(model accuracy). The CNN Model 2 trained with the same Batch size and Epochs Epochs, result in accuracy on an average of '82.05 percent' as shown in figures in results section (model accuracy).
-- 
+- Combined Ravdess and Tess datasets. Models are trained with 80 percent data and tested with remaining. The CNN Model 1 trained with Batch size of 16 and 200 Epochs, result in accuracy on an average of '85.82 percent' as shown in accuracy and loss figures (model accuracy). The CNN Model 2 trained with the same Batch size and Epochs Epochs, result in accuracy on an average of '82.05 percent' as shown in figures below (model accuracy).
+
+[Figure CNN model 1 accuracy](./images/model1_acc.png)
+[Figure CNN model 1 loss](./images/model1_loss.png)
+[Figure CNN model 2 accuracy](./images/model_2_acc.png)
+[Figure CNN model 2 loss](./images/model2_loss.png)
+
 - Results have been obtained for emodb test dataset for different models as summarised in Table 1. Details of the features and number of classes are also given in the Table.
+
+## TABLE:
+
+| **Models**|**Classes**|**Features**|**Datasets(English)**|**Validation Accuracy**|**Testing Accuracy on Emodb German dataset**|
+|============|========|=========|===========|================|================|
+|   CNN Model 1      |    8    |     MFCC    |       Ravdess, Tess       |    85.82        %  |         % |
+|---------|-----------|--------|-----------|---------------|--------------|
+|   CNN Model 1      |    8    |    MFCC     |        Ravdess, Tess        |     82.05        %  |           % |
+|============|========|=========|===========|================|================|
+|   Resnet 50      |   4     |    Mel-spectrogram     |      Ravdess, Tess, Crema, Iemocap, Savee        |    75.76        %  |      64.60     % |
+|---------|-----------|--------|-----------|---------------|--------------|
+|    Resnet 50       |    5    |     Mel-spectrogram    |      Ravdess, Tess, Crema, Iemocap, Savee         |    66.86        %  |      46.57     % |
+|---------|-----------|--------|-----------|---------------|--------------|
+|    Resnet 50       |    6    |    Mel-spectrogram     |Ravdess, Tess, Crema, Iemocap, Savee |     62.18       %  |     35.46      % |
+|---------|-----------|--------|-----------|---------------|--------------|
+|   Resnet 34        |    6    |    Mel-spectrogram     |         Ravdess, Tess, Crema, Iemocap, Savee      |    68.15        %  |    48.33  % |
+|---------|-----------|--------|-----------|---------------|--------------|
+|   Resnet 18       |     6   |     Mel-spectrogram   |       Ravdess, Tess, Crema, Iemocap, Savee        |     67.62       %  |           % |
+|---------|-----------|--------|-----------|---------------|--------------|
+|    Resnet 50       |    6    |    Mel-spectrogram & Modified Gd gram framewise concatention |      Ravdess, Tess, Crema, Iemocap, Savee         |    65.67   %  |   32.82        % |
+|---------|-----------|--------|-----------|---------------|--------------|
+|   Resnet 50 and VGG 16       |     6   |   Mel-spectrogram & Modified GD gram     |        Ravdess, Tess, Crema, Iemocap, Savee       |   65.01         %  |  31.72         % |
+|---------|-----------|--------|-----------|---------------|--------------|
+|    Resnet 50 and CNN Model 1      |    6    |    Mel-spectrogram &MFCC    |       Ravdess, Tess, Crema, Iemocap, Savee        |    73.14        %  |    39.65       % |
+|---------|-----------|--------|-----------|---------------|--------------|
 
 
 ## Conclusion :
