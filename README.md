@@ -98,7 +98,7 @@ $Mel(f) = 2595 log(1+f/700)$
    -  By converting the y-axis (frequency) to a log scale and the color dimension (amplitude) to decibels to form the spectrogram.
    - Map the y-axis (frequency) onto the mel scale to form the Mel-spectrogram.
 
-[Mel-spectrogram](./images/mel.png)
+./images/mel.png
 
 ## Modified GD gram:
 - Frame wise group delay after mapping the audio signal to the frequency domain using FFT by overlapping windows and saved in the form of image as shown in figure below.
